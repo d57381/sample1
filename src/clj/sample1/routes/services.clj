@@ -65,7 +65,22 @@
              :responses {200 {:body {:total pos-int?}}}
              :handler (fn [{{{:keys [x y]} :body} :parameters}]
                         {:status 200
-                         :body {:total (+ x y)}})}}]]
+                         :body {:total (+ x y)}})}}]
+
+    ["/times"
+     {:get {:summary "times with spec query parameters"
+            :parameters {:query {:x int?, :y int?}}
+            :responses {200 {:body {:total pos-int?}}}
+            :handler (fn [{{{:keys [x y]} :query} :parameters}]
+                       {:status 200
+                        :body {:total (* x y)}})}
+      :post {:summary "times with spec body parameters"
+             :parameters {:body {:x int?, :y int?}}
+             :responses {200 {:body {:total pos-int?}}}
+             :handler (fn [{{{:keys [x y]} :body} :parameters}]
+                        {:status 200
+                         :body {:total (* x y)}})}}]
+    ]
 
    ["/files"
     {:swagger {:tags ["files"]}}

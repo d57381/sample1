@@ -39,18 +39,21 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
-(def myAtom (r/atom 0))
+(def getAtom (r/atom 0))
+(def postAtom (r/atom 0))
+
+(def toAdd [(rand-int 1000) (rand-int 1000)])
 ;(def comps [(r/atom comp1 [1 2 0]) (r/atom comp2 [97 52 0]) (r/atom comp3 [2 2 0])])
 
-(defn postSum [x y resAtom]
+(defn postSum [vec resAtom]
   (POST "/api/math/plus"    {:headers {"accept" "application/json"}
-                             :params {:x x :y y}
+                             :params {:x (first vec) :y (second vec)}
                              :handler #(reset! resAtom (:total %))})
   )
 
-(defn getSum [x y resAtom]
+(defn getSum [vec resAtom]
   (GET "/api/math/plus"    {:headers {"accept" "application/json"}
-                                         :params {:x x :y y}
+                                         :params {:x (first vec) :y (second vec)}
                                          :handler #(reset! resAtom (:total %))}
 
     )
@@ -58,8 +61,8 @@
 
 (defn home-page []
 
-  [:p [:p "The sum of three and three is: " @myAtom]
-   [:p "This is a test!"]]
+  [:p [:p "Using GET, the sum of " (first toAdd) " and " (second toAdd) " is: " @getAtom]
+   [:p "Using POST, the sum of " (first toAdd) " and " (second toAdd) " is: " @postAtom]]
 
   )
 
@@ -108,7 +111,8 @@
   (ajax/load-interceptors!)
   (fetch-docs!)
 
-  (getSum 3 3 myAtom)
+  (postSum toAdd postAtom)
+  (getSum toAdd getAtom)
 
   (hook-browser-navigation!)
   (mount-components))
