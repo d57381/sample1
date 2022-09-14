@@ -39,18 +39,26 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
-(def myAtom (r/atom 0))
+(def comps [(r/atom comp1 [1 2 0]) (r/atom comp2 [97 52 0]) (r/atom comp3 [2 2 0])])
 
-(defn sum [x y res]
+(defn postSum [x y resAtom]
   (POST "/api/math/plus"    {:headers {"accept" "application/json"}
                              :params {:x x :y y}
-                             :handler #(reset! res (:total %))})
+                             :handler #(reset! resAtom (:total %))})
+  )
+
+(defn getSum [x y resAtom]
+  (GET "/api/math/plus"    {:headers {"accept" "application/json"}
+                                         :params {:x x :y y}
+                                         :handler #(reset! resAtom (:total %))}
+
+    )
   )
 
 (defn home-page []
 
-  [:p "The sum of three and three is: " @myAtom]
-   [:p "This is a test!"]
+  [:p [:p "The sum of three and three is: " @myAtom]
+   [:p "This is a test!"]]
 
   )
 
@@ -99,7 +107,7 @@
   (ajax/load-interceptors!)
   (fetch-docs!)
 
-  (sum 3 3 myAtom)
+  (getSum 3 3 myAtom)
 
   (hook-browser-navigation!)
   (mount-components))
