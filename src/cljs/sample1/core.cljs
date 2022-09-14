@@ -39,7 +39,8 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
-(def comps [(r/atom comp1 [1 2 0]) (r/atom comp2 [97 52 0]) (r/atom comp3 [2 2 0])])
+(def myAtom (r/atom 0))
+;(def comps [(r/atom comp1 [1 2 0]) (r/atom comp2 [97 52 0]) (r/atom comp3 [2 2 0])])
 
 (defn postSum [x y resAtom]
   (POST "/api/math/plus"    {:headers {"accept" "application/json"}
