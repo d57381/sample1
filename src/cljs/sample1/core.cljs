@@ -39,11 +39,15 @@
   [:section.section>div.container>div.content
    [:img {:src "/img/warning_clojure.png"}]])
 
+(def myAtom (r/atom []))
+
 
 (defn home-page []
-  [:section.section>div.container>div.content
-   (when-let [docs (:docs @session)]
-     [:div {:dangerouslySetInnerHTML {:__html (md->html docs)}}])])
+  (def res (:total (POST "/api/math/plus" {:params          {:headers {"Accept" "application/json"}}
+                                                            {:x 3 :y 3}
+                                                            {:handler #(res)}})))
+  [:p "The sum of three and three is: " res]
+  )
 
 (def pages
   {:home #'home-page
